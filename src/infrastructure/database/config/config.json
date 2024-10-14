@@ -1,0 +1,9 @@
+{
+    "development": {
+      "username": "root",
+      "password": "4dm1n_2024",
+      "database": "geocercas",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    }
+  }
