@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('GeocercasEmpleados', {
+    await queryInterface.createTable('GeocercasJefes', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
-      geocercaId: {
+      GeocercaId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Geocercas',
@@ -18,10 +18,10 @@ module.exports = {
         onDelete: 'CASCADE',
         allowNull: false,
       },
-      empleadoId: {
+      JefeId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Empleados',
+          model: 'Jefes',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -42,6 +42,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('GeocercasEmpleados');
+    await queryInterface.dropTable('GeocercasJefes');
   },
 };

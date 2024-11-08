@@ -1,35 +1,35 @@
 class GeocercaRepository {
-    constructor(GeocercaModel, empleadoModel) {
-      this.GeocercaModel = GeocercaModel;
-      this.empleadoModel = empleadoModel;
+    constructor(Geocercas, Jefes) {
+      this.Geocercas = Geocercas;
+      this.Jefes = Jefes;
     }
   
     async create(geocercaData) {
-      const geocerca = await this.GeocercaModel.create(geocercaData, {
-        include: [this.empleadoModel]
+      const geocerca = await this.Geocercas.create(geocercaData, {
+        include: [this.Jefes]
       });
 
-      // Si geocercaData contiene empleados, asigna la geocerca a esos empleados
+      // Si geocercaData contiene jefes, asigna la geocerca a esos jefes
       if (geocercaData.employees && geocercaData.employees.length > 0) {
-        // Usa el método addEmpleados para establecer la relación muchos a muchos
-        await geocerca.addEmpleados(geocercaData.employees);
+        // Usa el método addJefes para establecer la relación muchos a muchos
+        await geocerca.addJefes(geocercaData.employees);
       }
 
       return geocerca;
     }
   
     async findAll() {
-      return await this.GeocercaModel.findAll({ include: [this.empleadoModel] });
+      return await this.Geocercas.findAll({ include: [this.Jefes] });
     }
   
-    async assignToEmpleado(geocercaId, empleadoId) {
-      const geocerca = await this.GeocercaModel.findByPk(geocercaId);
-      const empleado = await this.empleadoModel.findByPk(empleadoId);
-      if (geocerca && empleado) {
-        await geocerca.addEmpleado(empleado);
+    async assignToJefe(geocercaId, jefeId) {
+      const geocerca = await this.Geocercas.findByPk(geocercaId);
+      const jefe = await this.Jefes.findByPk(jefeId);
+      if (geocerca && jefe) {
+        await geocerca.addJefe(jefe);
         return geocerca;
       }
-      throw new Error('Geocerca o empleado no encontrado');
+      throw new Error('Geocerca o jefe no encontrado');
     }
   }
   

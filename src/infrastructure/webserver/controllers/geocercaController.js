@@ -1,8 +1,8 @@
 class GeocercaController {
-    constructor({ crearGeocerca, listarGeocerca, asignarGeocercaAEmpleado }) {
+    constructor({ crearGeocerca, listarGeocerca, asignarGeocercaAJefe }) {
       this.crearGeocerca = crearGeocerca;
       this.listarGeocerca = listarGeocerca;
-      this.asignarGeocercaAEmpleado = asignarGeocercaAEmpleado;
+      this.asignarGeocercaAJefe = asignarGeocercaAJefe;
     }
   
     async create(req, res) {
@@ -23,10 +23,10 @@ class GeocercaController {
       }
     }
   
-    async assignToEmpleado(req, res) {
+    async assignToJefe(req, res) {
       try {
-        const { geocercaId, empleadoId } = req.body;
-        const result = await this.asignarGeocercaAEmpleado.execute(geocercaId, empleadoId);
+        const { geocercaId, jefeId } = req.body;
+        const result = await this.asignarGeocercaAJefe.execute(geocercaId, jefeId);
         res.status(200).json(result);
       } catch (err) {
         res.status(500).json({ error: err.message });

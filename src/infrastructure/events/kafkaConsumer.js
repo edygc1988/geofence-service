@@ -1,13 +1,13 @@
 const { Kafka } = require('kafkajs');
 
 // Importa los casos de uso
-const RegistrarEmpleado = require('../../application/useCases/registrarEmpleado');
+const RegistrarJefe = require('../../application/useCases/registrarJefe');
 
 // Importa los repositorios
-const EmpleadoRepository = require('../../domain/repositories/empleadoRepository');
+const JefeRepository = require('../../domain/repositories/jefeRepository');
 
 // Importa los modelos de base de datos
-const { Empleados } = require('../database');
+const { Jefes } = require('../database');
 
 
 // Configuración de Kafka
@@ -17,16 +17,16 @@ const kafkaConfig = {
 };
 
 // Instancia los repositorios
-const empleadoRepository = new EmpleadoRepository({ Empleados });
+const jefeRepository = new JefeRepository( {Jefes} );
 
 // Instancia los casos de uso
-const registerEmpleadoUseCase = new RegistrarEmpleado(empleadoRepository);
+const registerJefeUseCase = new RegistrarJefe(jefeRepository);
 
 class KafkaConsumerService {
   constructor() {
     this.kafka = new Kafka(kafkaConfig);
     this.consumer = this.kafka.consumer({ groupId: 'geofences-group' });
-    this.registerEmpleadoUseCase = registerEmpleadoUseCase;
+    this.registerJefeUseCase = registerJefeUseCase;
   }
 
   async start() {
@@ -38,14 +38,14 @@ class KafkaConsumerService {
         const data = JSON.parse(message.value.toString());
         console.log(data);
         if (topic === 'jefe-events') {
-          await this.processEmpleadoEvent(data);
+          await this.processJefeEvent(data);
         }
       }
     });
   }
 
-  async processEmpleadoEvent(data) {
-    await this.registerEmpleadoUseCase.execute(data);
+  async processJefeEvent(data) {
+    await this.registerJefeUseCase.execute(data);
   }
 
   async stop() {

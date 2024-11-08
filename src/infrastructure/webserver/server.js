@@ -1,13 +1,15 @@
 const express = require('express');
 const cors = require('cors');  // Importa el paquete CORS
 const bodyParser = require('body-parser');
-const { Geocercas, Empleados } = require('../database');
+const { Geocercas, Jefes } = require('../database');
 const GeocercaRepository = require('../../domain/repositories/geocercaRepository');
 const GeocercaController = require('../webserver/controllers/geocercaController');
 const crearGeocerca = require('../../application/useCases/crearGeocercaUseCase');
 const listarGeocerca = require('../../application/useCases/listaGeoCercaUseCase');
-const asignarGeocercaAEmpleado = require('../../application/useCases/asignarGeocercaUseCase');
+const asignarGeocercaAJefe = require('../../application/useCases/asignarGeocercaUseCase');
 const geocercaRoutes = require('../webserver/routes/geocercaRoutes');
+const metricsRoutes = require('../webserver/routes/metricasRoutes');
+const { collectDefaultMetrics } = require('prom-client');
 
 const KafkaController = require('../../infrastructure/events/kafkaConsumer');
 
@@ -15,18 +17,22 @@ const KafkaController = require('../../infrastructure/events/kafkaConsumer');
 const KafkaConsumerService = new KafkaController();
 
 const app = express();
+// Configura la recolección de métricas por defecto
+collectDefaultMetrics();
 // Habilitar CORS para todas las solicitudes
 app.use(cors());
 app.use(bodyParser.json());
 
-const geocercaRepository = new GeocercaRepository(Geocercas, Empleados);
+
+const geocercaRepository = new GeocercaRepository(Geocercas, Jefes);
 const geocercaController = new GeocercaController({
   crearGeocerca: new crearGeocerca(geocercaRepository),
   listarGeocerca: new listarGeocerca(geocercaRepository),
-  asignarGeocercaAEmpleado: new asignarGeocercaAEmpleado(geocercaRepository),
+  asignarGeocercaAJefe: new asignarGeocercaAJefe(geocercaRepository),
 });
 
 app.use('/api/v1/geocerca', geocercaRoutes(geocercaController));
+app.use('/', metricsRoutes);
 
 const PORT = process.env.PORT || 3000;
 

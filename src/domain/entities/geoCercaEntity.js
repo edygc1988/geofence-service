@@ -1,11 +1,11 @@
 class GeoCerca {
-    constructor({ id, name, polygon, empleados }) {
+    constructor({ id, name, polygon, jefes }) {
       this.id = id;
       this.name = name;
       this.polygon = polygon;  // Array de coordenadas
-      this.empleados = empleados || [];
+      this.jefes = jefes || [];
     }
   }
   
-  module.exports = GeoCercas;
+  module.exports = GeoCerca;
   

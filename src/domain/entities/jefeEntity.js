@@ -1,4 +1,4 @@
-class Empleado {
+class Jefe {
     constructor({ id, nombre, tipo }) {
       this.id = id;
       this.name = nombre;
@@ -6,5 +6,5 @@ class Empleado {
     }
   }
   
-  module.exports = Empleado;
+  module.exports = Jefe;
   
