@@ -34,4 +34,3 @@ class GeocercaRepository {
   }
   
   module.exports = GeocercaRepository;
-  
